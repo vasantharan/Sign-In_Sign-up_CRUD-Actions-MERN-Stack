@@ -1,1 +1,1 @@
-# Sign In Sign up CRUD Actions MERN Stack
+# Sign In and Sign Up Operations CRUD Actions MERN Stack 
