@@ -19,7 +19,6 @@ const SignIn = ({ history }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            console.log('Submitted')
             const response = await signIn(formData);  
             if (response.data.message === "Account doesn't exist") {
                 setError("Account doesn't exist. Please check your credentials or sign up.");
@@ -27,9 +26,7 @@ const SignIn = ({ history }) => {
                 setError('Wrong password. Please try again.');
             } else if (response.data.message === 'Signed in') {
                 setSuccess('Signed in')
-                console.log(response.data.token)
                 localStorage.setItem('token', response.data.token); 
-                console.log('Signed in successfully');
                 navigate('/data') 
             }
         } catch (error) {
