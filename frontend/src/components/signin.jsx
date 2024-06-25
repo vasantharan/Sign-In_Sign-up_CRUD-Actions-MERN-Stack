@@ -1,0 +1,90 @@
+import React from 'react';
+import { useState } from 'react';
+import { signIn } from '../api'; // Assuming signIn API is correctly defined
+import { Link, useNavigate } from 'react-router-dom';
+
+const SignIn = ({ history }) => {
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    });
+    const [error, setError] = useState('')
+    const [success, setSuccess] = useState('')
+    const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            console.log('Submitted')
+            const response = await signIn(formData);  
+            if (response.data.message === "Account doesn't exist") {
+                setError("Account doesn't exist. Please check your credentials or sign up.");
+            } else if (response.data.message === 'Wrong Password') {
+                setError('Wrong password. Please try again.');
+            } else if (response.data.message === 'Signed in') {
+                setSuccess('Signed in')
+                console.log(response.data.token)
+                localStorage.setItem('token', response.data.token); 
+                console.log('Signed in successfully');
+                navigate('/data') 
+            }
+        } catch (error) {
+            setError('Error signing in');
+            console.error('Error signing in', error);
+        }
+    };
+
+    return (
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-md-6">
+                    <div className="card">
+                        <div className="card-header">
+                            <h3>Sign In</h3>
+                        </div>
+                        <div className="card-body">
+                            {error && <div className="alert alert-danger">{error}</div>}
+                            {success && <div className="alert alert-success">{success}</div>}
+                            <form onSubmit={handleSubmit}>
+                                <div className="form-group mb-3">
+                                    <input
+                                        type="email"
+                                        className="form-control"
+                                        placeholder="Enter email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group mb-3">
+                                    <input
+                                        type="password"
+                                        className="form-control"
+                                        placeholder="Password"
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                                <button type="submit" className="btn btn-primary btn-block">
+                                    Sign In
+                                </button>
+                                <div className="mt-3 text-center">
+                                    <p>Don't have an account? <Link to="/signup" className="text-primary">Sign Up</Link></p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default SignIn;
