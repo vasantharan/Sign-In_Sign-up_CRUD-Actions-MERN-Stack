@@ -16,7 +16,7 @@ console.log(process.env.db_url)
 const port = 5000
 
 app.use(cors())
-app.use(cookie())
+app.use(cookie()) 
 app.use(express.json()) 
 
 app.use('/',routes) 
