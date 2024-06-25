@@ -4,6 +4,7 @@ const app = express()
 const doenv = require('dotenv')
 const routes = require('./route')
 const cors = require('cors')
+const cookie = require('cookie-parser')
 
 
 doenv.config(
@@ -15,6 +16,7 @@ console.log(process.env.db_url)
 const port = 5000
 
 app.use(cors())
+app.use(cookie()) 
 app.use(express.json()) 
 
 app.use('/',routes) 
