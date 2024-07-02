@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000'; 
+const API_URL = 'https://sign-in-sign-up-crud-actions-mern-stack.onrender.com'; 
 
 export const signUp = async (userData) => {
     try {

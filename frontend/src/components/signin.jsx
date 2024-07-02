@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { signIn } from '../api'; // Assuming signIn API is correctly defined
+import { signIn } from '../api'; 
 import { Link, useNavigate } from 'react-router-dom';
 
 const SignIn = ({ history }) => {
@@ -10,6 +10,7 @@ const SignIn = ({ history }) => {
     });
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -18,8 +19,10 @@ const SignIn = ({ history }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
-            const response = await signIn(formData);  
+            const response = await signIn(formData);
+            console.log(response)  
             if (response.data.message === "Account doesn't exist") {
                 setError("Account doesn't exist. Please check your credentials or sign up.");
             } else if (response.data.message === 'Wrong Password') {
@@ -32,6 +35,8 @@ const SignIn = ({ history }) => {
         } catch (error) {
             setError('Error signing in');
             console.error('Error signing in', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -69,9 +74,10 @@ const SignIn = ({ history }) => {
                                         required
                                     />
                                 </div>
-                                <button type="submit" className="btn btn-primary btn-block">
+                                <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
                                     Sign In
                                 </button>
+                                {loading && <div className="text-center"><div className="spinner-border" role="status"><span className="visually-hidden">Loading...</span></div></div>}
                                 <div className="mt-3 text-center">
                                     <p>Don't have an account? <Link to="/signup" className="text-primary">Sign Up</Link></p>
                                 </div>

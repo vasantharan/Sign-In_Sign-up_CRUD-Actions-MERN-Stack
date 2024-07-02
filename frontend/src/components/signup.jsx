@@ -11,6 +11,7 @@ const SignUp = ({ history }) => {
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -19,9 +20,9 @@ const SignUp = ({ history }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const response = await signUp(formData);
-            console.log(response);
             if (response === 'Account already exists') {
                 setError('Account already exists');
                 setSuccess('');
@@ -37,6 +38,8 @@ const SignUp = ({ history }) => {
             setError('Error signing up');
             setSuccess('');
             console.error('Error signing up', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -96,9 +99,10 @@ const SignUp = ({ history }) => {
                                         required
                                     />
                                 </div>
-                                <button type="submit" className="btn btn-primary btn-block">
+                                <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
                                     Sign Up
                                 </button>
+                                {loading && <div className="text-center"><div className="spinner-border" role="status"><span className="visually-hidden">Loading...</span></div></div>}
                                 <div className="mt-3 text-center">
                                     <p>Already have an account? <Link to="/signin" className="text-primary">Sign In</Link></p>
                                 </div>
